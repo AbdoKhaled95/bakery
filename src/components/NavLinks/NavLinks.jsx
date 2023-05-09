@@ -1,29 +1,47 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useColorModeContext } from "../../context/ColorModeContext";
 
-const NavLinks = ({ page }) => {
+const NavLinks = ({ page, trigger, urlPathname }) => {
+  const { PrimaryMainColor } = useColorModeContext();
   return (
-    <Link
-      style={{
-        textDecoration: "none",
-        color: "white",
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        height: { sx: "auto", md: 60 },
+        borderTop: {
+          md:
+            urlPathname?.replace("/", "").toLowerCase() ===
+              page?.toLowerCase() && `${PrimaryMainColor} solid 3px`,
+          sx: "none",
+        },
       }}
-      to={page.toLowerCase().replace(" ", "-")}
     >
-      <Typography
-        sx={{
-          height: "100%",
-          bgcolor: "red",
-          fontSize: { xs: 14, md: 18 },
-          "&:hover": {
-            color: "primary.main",
-          },
+      <Link
+        style={{
+          textDecoration: "none",
+          color: trigger ? "#595959" : "white",
         }}
+        to={page.toLowerCase().replace(" ", "-")}
       >
-        {page}
-      </Typography>
-    </Link>
+        <Typography
+          variant="body2"
+          sx={{
+            transition: "all .4s",
+            mx: { xs: 2, md: 1 },
+            fontSize: { xs: 16, md: 18 },
+            fontWeight: 500,
+            "&:hover": {
+              color: "primary.main",
+            },
+          }}
+        >
+          {page}
+        </Typography>
+      </Link>
+    </Box>
   );
 };
 

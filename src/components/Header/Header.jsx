@@ -1,106 +1,92 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import HeaderLogo from "./HeaderLogo";
 import NavLinks from "../NavLinks/NavLinks";
+import { useScrollTrigger } from "@mui/material";
+import HeaderDrawer from "./HeaderDrawer";
+import { useLocation } from "react-router-dom";
 
 const pages = ["Home", "About", "Our Offer", "Gallery", "Blog", "Contact"];
 
 const Header = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
+  const urlPathname = useLocation();
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+  });
+  const [isDrawerOpened, setIsDrawerOpened] = useState(false);
+  useEffect(() => {
+    setIsDrawerOpened(false);
+  }, [urlPathname?.pathname]);
   return (
-    <AppBar
-      position="static"
-      sx={{
-        boxShadow: 0,
-        height: 60,
-
-        //  bgcolor: "transparent"
-      }}
-    >
-      <Container maxWidth="xl">
-        <Toolbar>
-          <HeaderLogo />
-
-          {/* <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+    <>
+      <AppBar
+        position="fixed"
+        sx={{
+          boxShadow: 0,
+          height: 60,
+          backgroundColor: trigger ? "white" : "transparent",
+          boxShadow: "0 0 7px rgba(0,0,0,0.09)",
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar
+            variant="dense"
+            sx={{
+              height: 60,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "space-between", md: "space-around" },
+            }}
+          >
             <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClick={() => setIsDrawerOpened(!isDrawerOpened)}
               sx={{
-                display: { xs: "block", md: "none" },
+                display: { xs: "flex", md: "none" },
+                color: trigger ? "#595959" : "white",
+                ":hover": {
+                  bgcolor: "transparent",
+                  color: "primary.main",
+                },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography
-                    sx={{
-                      textAlign: "center",
-                      "&:hover": {
-                        color: "primary.main",
-                      },
-                    }}
-                  >
-                    {page}
-                  </Typography>
-                </MenuItem>
+              {isDrawerOpened ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+
+            <HeaderLogo trigger={trigger} />
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              {pages.map((page, i) => (
+                <NavLinks
+                  key={i}
+                  page={page}
+                  trigger={trigger}
+                  urlPathname={urlPathname?.pathname}
+                />
               ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-*/}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <NavLinks page={page} />
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <HeaderDrawer
+        trigger={trigger}
+        setIsDrawerOpened={setIsDrawerOpened}
+        isDrawerOpened={isDrawerOpened}
+        pages={pages}
+      />
+    </>
   );
 };
 
