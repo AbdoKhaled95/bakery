@@ -10,6 +10,7 @@ const HomeBanner = () => {
         position: "relative",
         backgroundImage: `url(${homeBannerImg})`,
         backgroundSize: "cover",
+        backgroundAttachment: "fixed",
         minHeight: "600px",
         height: "100vh",
         display: "flex",

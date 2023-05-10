@@ -7,15 +7,19 @@ import Notfound from "./pages/NotFound/NotFound";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home/Home";
 import ButtonToTop from "./components/Buttons/ButtonToTop";
-import { useColorModeContext } from "./context/ColorModeContext";
+import { useMainThemeContext } from "./context/MainThemeContext";
+import SideDrawer from "./components/SideDrawer/SideDrawer";
 
 const App = () => {
-  const { changeMainColor, theme, colorMode } = useColorModeContext();
+  const { theme, colorMode } = useMainThemeContext();
   const {} = useMainContext();
   return (
     <>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+        <CssBaseline enableColorScheme />
+
+        <SideDrawer />
+
         <Box height={5000}>
           <Header />
           <Routes>
@@ -24,11 +28,13 @@ const App = () => {
 
             <Route path="*" element={<Notfound />}></Route>
           </Routes>
-          <Button onClick={() => changeMainColor("#fff")}>test</Button>
-          <Button onClick={() => colorMode.toggleColorMode("#fff")}>
+
+          <Button
+            variant="contained"
+            onClick={() => colorMode.toggleColorMode()}
+          >
             mode
           </Button>
-
           <ButtonToTop />
         </Box>
       </ThemeProvider>

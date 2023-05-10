@@ -1,10 +1,11 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Link, Typography, useTheme } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
-import { useColorModeContext } from "../../context/ColorModeContext";
+import { Link as routerLink } from "react-router-dom";
+import { useMainThemeContext } from "../../context/MainThemeContext";
 
 const NavLinks = ({ page, trigger, urlPathname }) => {
-  const { PrimaryMainColor } = useColorModeContext();
+  // const {  } = useMainThemeContext();
+  const PrimaryMainColor = useTheme().palette.primary.main;
   return (
     <Box
       sx={{
@@ -13,14 +14,18 @@ const NavLinks = ({ page, trigger, urlPathname }) => {
         height: { sx: "auto", md: 60 },
         borderTop: {
           md:
-            urlPathname?.replace("/", "").toLowerCase() ===
-              page?.toLowerCase() && `${PrimaryMainColor} solid 3px`,
+            urlPathname?.replace("/", "").toLowerCase() === page?.toLowerCase()
+              ? `${PrimaryMainColor} solid 3px`
+              : page === "Home" &&
+                urlPathname === "/" &&
+                `${PrimaryMainColor} solid 3px`,
           sx: "none",
         },
       }}
     >
       <Link
-        style={{
+        component={routerLink}
+        sx={{
           textDecoration: "none",
           color: trigger ? "#595959" : "white",
         }}

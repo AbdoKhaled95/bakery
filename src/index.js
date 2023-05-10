@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { MainProvider } from "./context/MainContext";
-import ColorModeProvider from "./context/ColorModeContext";
+import MainThemeProvider from "./context/MainThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -13,9 +13,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <MainProvider>
-        <ColorModeProvider>
+        <MainThemeProvider>
           <App />
-        </ColorModeProvider>
+        </MainThemeProvider>
       </MainProvider>
     </BrowserRouter>
   </React.StrictMode>
